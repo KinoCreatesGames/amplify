@@ -57,6 +57,6 @@ class HUD extends FlxSpriteGroup {
 	public function updateTime(time:Float) {
 		var flooredTime = Math.floor(time);
 		var time = '${flooredTime}'.lpad('0', 3);
-		timeText.text = '${time}';
+		timeText.text = 'Time ${time}';
 	}
 }

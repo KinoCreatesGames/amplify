@@ -1,5 +1,7 @@
 package game.char;
 
+import flixel.math.FlxMath;
+
 // Note we'll be using tiles so don't go over the tile limit
 class Actor extends FlxSprite {
 	public var name:String;
@@ -25,5 +27,9 @@ class Actor extends FlxSprite {
 		atk = data.atk;
 		def = data.def;
 		spd = data.spd;
+	}
+
+	public function takeDamage(value:Int) {
+		health = (health - value).clampf(0, FlxMath.MAX_VALUE_INT);
 	}
 }
