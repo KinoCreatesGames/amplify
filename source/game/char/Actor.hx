@@ -10,8 +10,10 @@ class Actor extends FlxSprite {
 
 	public function new(x:Float, y:Float, actorData:ActorData) {
 		super(x, y);
-		data = actorData;
-		assignStats();
+		if (actorData != null) {
+			data = actorData;
+			assignStats();
+		}
 	}
 
 	/**
