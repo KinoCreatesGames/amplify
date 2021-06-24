@@ -3,9 +3,12 @@ package game.char;
 class Player extends Actor {
 	public static inline var M_SPEED = 200;
 
+	var playerImpactSound:FlxSound;
+
 	public function new(x:Float, y:Float, actorData:ActorData) {
 		super(x, y, actorData);
 		drag.y = drag.x = 350;
+		playerImpactSound = FlxG.sound.load(AssetPaths.impact__wav);
 		makeGraphic(8, 8, KColor.BLUE);
 	}
 
@@ -49,5 +52,10 @@ class Player extends Actor {
 			this.velocity.set(M_SPEED, 0);
 			this.velocity.rotate(FlxPoint.weak(0, 0), angle);
 		}
+	}
+
+	override public function takeDamage(value:Int) {
+		playerImpactSound.play();
+		super.takeDamage(value);
 	}
 }

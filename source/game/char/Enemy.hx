@@ -6,6 +6,8 @@ class Enemy extends game.char.Actor {
 	public var walkPath:Array<FlxPoint>;
 	public var points:Int;
 
+	var enemyImpactSound:FlxSound;
+
 	public function new(x:Float, y:Float, path:Array<FlxPoint>,
 			monsterData:MonsterData) {
 		super(x, y, monsterData);
@@ -15,6 +17,7 @@ class Enemy extends game.char.Actor {
 		if (monsterData != null) {
 			points = monsterData.points;
 		}
+		enemyImpactSound = FlxG.sound.load(AssetPaths.enemy_impact__wav);
 	}
 
 	override public function update(elapsed:Float) {
@@ -23,4 +26,9 @@ class Enemy extends game.char.Actor {
 	}
 
 	public function updateMovement(elapsed:Float) {}
+
+	override public function takeDamage(value:Int) {
+		enemyImpactSound.play();
+		super.takeDamage(value);
+	}
 }
