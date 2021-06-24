@@ -22,6 +22,8 @@ class PlayState extends FlxState {
 	var accumulatedTime:Float;
 	var centerPoint:FlxSprite;
 	var spawnPoint:FlxSprite;
+	var completeLevel:Bool;
+	var gameOver:Bool;
 
 	override public function create() {
 		super.create();
@@ -73,9 +75,20 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		updateGameState(elapsed);
 		updateSpawnEnemy(elapsed);
 		updateCollisions(elapsed);
 		updateGameTime(elapsed);
+	}
+
+	function updateGameState(elapsed:Float) {
+		if (player.health <= 0 || player.alive == false) {
+			gameOver = true;
+		}
+		// User can retry
+		if (gameOver) {
+			openSubState(new GameOverSubState());
+		}
 	}
 
 	function updateSpawnEnemy(elapsed:Float) {
@@ -95,7 +108,7 @@ class PlayState extends FlxState {
 	}
 
 	function updateCollisions(elapsed:Float) {
-		FlxG.overlap(player, enemyGrp);
+		FlxG.overlap(player, enemyGrp, playerTouchEnemy);
 	}
 
 	function updateGameTime(elapsed:Float) {
@@ -104,6 +117,7 @@ class PlayState extends FlxState {
 	}
 
 	function playerTouchEnemy(player:Player, enemy:Enemy) {
+		FlxG.camera.shake(0.05, 0.05);
 		player.takeDamage(1);
 		enemy.kill();
 	}

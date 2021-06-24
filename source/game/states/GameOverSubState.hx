@@ -51,11 +51,11 @@ class GameOverSubState extends FlxSubState {
 		var padding = 24;
 		var x = background.x + padding;
 		var y = background.y + (background.height - padding);
-		// continueButton = new TextButton(cast x, cast y, 'Continue',
-		// 	Globals.FONT_N, clickContinue);
+		continueButton = new TextButton(cast x, cast y, 'Continue',
+			Globals.FONT_N, clickContinue);
 
-		// continueButton.hoverColor = KColor.PRETTY_PINK;
-		// continueButton.clickColor = KColor.RICH_BLACK_FORGRA;
+		continueButton.hoverColor = KColor.PRETTY_PINK;
+		continueButton.clickColor = KColor.RICH_BLACK_FORGRA;
 
 		x = background.x + (background.width - padding);
 		toTitleButton = new TextButton(cast x, cast y, 'To Title',
@@ -64,7 +64,7 @@ class GameOverSubState extends FlxSubState {
 
 		toTitleButton.hoverColor = KColor.PRETTY_PINK;
 		toTitleButton.clickColor = KColor.RICH_BLACK_FORGRA;
-		// add(continueButton);
+		add(continueButton);
 		add(toTitleButton);
 	}
 
