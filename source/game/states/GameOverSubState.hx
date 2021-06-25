@@ -64,6 +64,9 @@ class GameOverSubState extends FlxSubState {
 
 		toTitleButton.hoverColor = KColor.PRETTY_PINK;
 		toTitleButton.clickColor = KColor.RICH_BLACK_FORGRA;
+		continueButton.y -= 30;
+		continueButton.cameraCenterHorz();
+		toTitleButton.cameraCenterHorz();
 		add(continueButton);
 		add(toTitleButton);
 	}

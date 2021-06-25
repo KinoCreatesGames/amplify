@@ -1,5 +1,6 @@
 package game.states;
 
+import flixel.effects.particles.FlxEmitter;
 import flixel.math.FlxVelocity;
 import game.ui.HUD;
 import flixel.util.FlxSignal;
@@ -24,13 +25,14 @@ class PlayState extends FlxState {
 	var spawnPoint:FlxSprite;
 	var completeLevel:Bool;
 	var gameOver:Bool;
+	var starEmitter:FlxEmitter;
 
 	override public function create() {
 		super.create();
 		spawnTimer = 0;
 		accumulatedTime = 0;
-		add(new FlxText("Hello World", 32).screenCenter());
 		createCenterPoint();
+		createParticles();
 		createPlayer();
 		createEnemies();
 		createHUD();
@@ -42,6 +44,22 @@ class PlayState extends FlxState {
 		centerPoint.screenCenter();
 		centerPoint.makeGraphic(8, 8, KColor.TRANSPARENT);
 		add(centerPoint);
+	}
+
+	function createParticles() {
+		starEmitter = new FlxEmitter(centerPoint.x, centerPoint.y, 5000);
+		starEmitter.makeParticles(2, 2, KColor.WHITE, 5000);
+		// starEmitter.launchMode = FlxEmitterMode.CIRCLE;
+		starEmitter.color.set(0xFFFAFAFA, KColor.WHITE);
+		starEmitter.height = 16;
+		starEmitter.width = 16;
+		starEmitter.angle.set(0, 360);
+		starEmitter.velocity.set(50, 50, 50, 50, 150);
+		// starEmitter.speed.set(150);
+		starEmitter.start(false, 0.025, 0);
+		starEmitter.x -= starEmitter.width / 2;
+		starEmitter.y -= starEmitter.height / 2;
+		add(starEmitter);
 	}
 
 	function createPlayer() {
