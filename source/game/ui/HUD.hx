@@ -4,6 +4,7 @@ import flixel.group.FlxSpriteGroup;
 
 class HUD extends FlxSpriteGroup {
 	var scoreText:FlxText;
+	var highScoreText:FlxText;
 	var timeText:FlxText;
 	var position:FlxPoint;
 	var healthVisual:Array<FlxSprite>;
@@ -18,6 +19,7 @@ class HUD extends FlxSpriteGroup {
 	function create() {
 		createHealth();
 		createScore();
+		createHighScore();
 		createTime();
 		this.members.iter((member) -> {
 			member.scrollFactor.set(0, 0);
@@ -27,13 +29,22 @@ class HUD extends FlxSpriteGroup {
 	function createHealth() {}
 
 	function createScore() {
-		scoreText = new FlxText(0, 12, -1, 'Score 000', Globals.FONT_N);
+		scoreText = new FlxText(0, 12, -1, 'Score 000', Globals.FONT_SM);
 		scoreText.screenCenterHorz();
+		scoreText.x -= 20;
 		add(scoreText);
 	}
 
+	function createHighScore() {
+		var margin = 5;
+		highScoreText = new FlxText(0, 12, -1, 'High Score 000',
+			Globals.FONT_SM);
+		highScoreText.x = FlxG.width - (highScoreText.width + margin);
+		add(highScoreText);
+	}
+
 	function createTime() {
-		timeText = new FlxText(0, 12, -1, 'Time 000', Globals.FONT_N);
+		timeText = new FlxText(0, 12, -1, 'Time 000', Globals.FONT_SM);
 		timeText.x += 12;
 		add(timeText);
 	}
@@ -52,6 +63,11 @@ class HUD extends FlxSpriteGroup {
 	public function updateScore(value:Int) {
 		var score = '${value}'.lpad('0', 5);
 		scoreText.text = 'Score ${score}';
+	}
+
+	public function updateHighScore(value:Int) {
+		var score = '${value}'.lpad('0', 5);
+		highScoreText.text = 'High Score ${score}';
 	}
 
 	public function updateTime(time:Float) {

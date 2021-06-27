@@ -1,5 +1,6 @@
 package game.states;
 
+import flixel.math.FlxVector;
 import flixel.effects.particles.FlxEmitter;
 import flixel.math.FlxVelocity;
 import game.ui.HUD;
@@ -10,6 +11,13 @@ import flixel.FlxState;
 class PlayState extends FlxState {
 	public var gameTime:Float;
 	public var currentScore:Float;
+
+	var mouseCursor:FlxSprite;
+
+	/**
+	 * Offset to apply due to the nature of angle sprites drawn. 
+	 */
+	public static inline var ANGLE_OFFSET = 90;
 
 	public static inline var ENEMY_SPAWN_TIME:Float = 1.5;
 	public static inline var ENEMY_SPEED:Float = 50;
@@ -37,6 +45,18 @@ class PlayState extends FlxState {
 		createEnemies();
 		createHUD();
 		createSignals();
+		setupMouse();
+		// Set current Background
+		bgColor = 0xFF1D2B53;
+	}
+
+	function setupMouse() {
+		mouseCursor = new FlxSprite(8, 8);
+		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, false, 8, 8,
+			true);
+		mouseCursor.animation.add('moving', [0], null, true);
+		FlxG.mouse.visible = false;
+		add(mouseCursor);
 	}
 
 	function createCenterPoint() {
@@ -93,10 +113,17 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		updateMouse();
 		updateGameState(elapsed);
 		updateSpawnEnemy(elapsed);
 		updateCollisions(elapsed);
 		updateGameTime(elapsed);
+	}
+
+	function updateMouse() {
+		mouseCursor.scrollFactor.set(0, 0);
+		var mousePosition = FlxG.mouse.getPosition();
+		mouseCursor.setPosition(mousePosition.x, mousePosition.y);
 	}
 
 	function updateGameState(elapsed:Float) {
@@ -118,7 +145,10 @@ class PlayState extends FlxState {
 			var enemy = new Cruud(x, y, null);
 			FlxVelocity.accelerateTowardsObject(enemy, player, ENEMY_SPEED,
 				100);
+			var acclNorm = new FlxVector(enemy.acceleration.x,
+				enemy.acceleration.y).normalize();
 			enemyGrp.add(enemy);
+			enemy.angle = acclNorm.degrees + ANGLE_OFFSET;
 			spawnTimer = 0;
 		} else {
 			spawnTimer += elapsed;

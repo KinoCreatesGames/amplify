@@ -1,5 +1,7 @@
 package game.char;
 
+import flixel.math.FlxRect;
+import game.objects.Laser;
 import flixel.math.FlxVector;
 
 class Player extends Actor {
@@ -8,6 +10,14 @@ class Player extends Actor {
 	var playerImpactSound:FlxSound;
 	var firePosition:FlxPoint;
 	var fireNormal:FlxVector;
+	var fireLine:FlxSprite;
+	var firingLaser:Laser;
+
+	/**
+	 * 90 Degree angle offset to account for the ship direction in 
+	 * Aseprite.
+	 */
+	public static inline var ANGLE_OFFSET = 90;
 
 	public function new(x:Float, y:Float, actorData:ActorData) {
 		super(x, y, actorData);
@@ -15,7 +25,23 @@ class Player extends Actor {
 		firePosition = new FlxPoint(0, 0);
 		fireNormal = new FlxVector(0, 0);
 		playerImpactSound = FlxG.sound.load(AssetPaths.impact__wav);
-		makeGraphic(8, 8, KColor.BLUE);
+
+		loadGraphic(AssetPaths.player_ship__png, false, 8, 8, true);
+		createFireLine();
+		createFireLaser();
+	}
+
+	function createFireLine() {
+		fireLine = new FlxSprite(this.x, this.y);
+		fireLine.makeGraphic(FlxG.width + 30, 1, 0x66ff004d);
+		fireLine.origin.set(0, 0);
+		FlxG.state.add(fireLine);
+	}
+
+	function createFireLaser() {
+		firingLaser = new Laser(new FlxRect(2, 1, 4, 6));
+		firingLaser.origin.set(0, 0);
+		FlxG.state.add(firingLaser);
 	}
 
 	override public function assignStats() {
@@ -39,7 +65,13 @@ class Player extends Actor {
 			+ (distanceRadius * Math.cos(fireNormal.x));
 		firePosition.y = firePosition.y
 			+ (distanceRadius * Math.sin(fireNormal.y));
-		this.angle = fireNormal.degrees;
+		fireLine.angle = fireNormal.degrees;
+		fireLine.x = this.x + (this.width / 2);
+		fireLine.y = this.y + (this.height / 2);
+		firingLaser.x = this.x;
+		firingLaser.y = this.y;
+		firingLaser.angle = fireNormal.degrees;
+		this.angle = fireNormal.degrees + ANGLE_OFFSET;
 	}
 
 	function updateMovement(elapsed:Float) {
@@ -72,6 +104,7 @@ class Player extends Actor {
 
 			this.velocity.set(M_SPEED, 0);
 			this.velocity.rotate(FlxPoint.weak(0, 0), angle);
+			this.bound();
 		}
 	}
 

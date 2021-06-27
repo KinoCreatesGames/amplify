@@ -47,4 +47,6 @@ class Globals {
 	 * Normal Size
 	 */
 	public static inline var FONT_N:Int = 12;
+
+	public static inline var FONT_SM:Int = 10;
 }

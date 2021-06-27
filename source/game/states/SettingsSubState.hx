@@ -43,7 +43,6 @@ class SettingsSubState extends FlxSubState {
 		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 12, 12,
 			true);
 		mouseCursor.animation.add('moving', [0], null, true);
-		mouseCursor.animation.add('hold', [1], null, true);
 		FlxG.mouse.visible = false;
 		add(mouseCursor);
 	}
