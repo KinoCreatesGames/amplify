@@ -39,9 +39,8 @@ class SettingsSubState extends FlxSubState {
 	}
 
 	function setupMouse() {
-		mouseCursor = new FlxSprite(12, 12);
-		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 12, 12,
-			true);
+		mouseCursor = new FlxSprite(8, 8);
+		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 8, 8, true);
 		mouseCursor.animation.add('moving', [0], null, true);
 		FlxG.mouse.visible = false;
 		add(mouseCursor);

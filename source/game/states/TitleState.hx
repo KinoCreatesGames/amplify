@@ -14,6 +14,9 @@ class TitleState extends FlxState {
 	public var optionsButton:TextButton;
 	public var creditsButton:TextButton;
 	public var completeFadeStart:Bool;
+
+	var mouseCursor:FlxSprite;
+
 	#if desktop
 	public var exitButton:TextButton;
 	#end
@@ -32,7 +35,16 @@ class TitleState extends FlxState {
 		createControls();
 		createCredits();
 		createVersion();
+		setupMouse();
 		super.create();
+	}
+
+	function setupMouse() {
+		mouseCursor = new FlxSprite(8, 8);
+		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 8, 8, true);
+		mouseCursor.animation.add('moving', [0], null, true);
+		FlxG.mouse.visible = false;
+		add(mouseCursor);
 	}
 
 	public function createPressStart() {
@@ -55,13 +67,13 @@ class TitleState extends FlxState {
 		playButton.screenCenter();
 		playButton.y += y;
 		y += 40;
-		continueButton = new TextButton(0, 0, Globals.TEXT_CONTINUE,
-			Globals.FONT_N, clickContinue);
-		continueButton.hoverColor = KColor.BURGUNDY;
-		continueButton.clickColor = KColor.BURGUNDY;
-		continueButton.screenCenter();
-		continueButton.y += y;
-		y += 40;
+		// continueButton = new TextButton(0, 0, Globals.TEXT_CONTINUE,
+		// 	Globals.FONT_N, clickContinue);
+		// continueButton.hoverColor = KColor.BURGUNDY;
+		// continueButton.clickColor = KColor.BURGUNDY;
+		// continueButton.screenCenter();
+		// continueButton.y += y;
+		// y += 40;
 		optionsButton = new TextButton(0, 0, Globals.TEXT_OPTIONS,
 			Globals.FONT_N, clickOptions);
 		optionsButton.hoverColor = KColor.BURGUNDY;
@@ -95,7 +107,7 @@ class TitleState extends FlxState {
 		creditsButton.canClick = false;
 		creditsButton.alpha = 0;
 		add(playButton);
-		add(continueButton);
+
 		add(optionsButton);
 		add(creditsButton);
 		#if desktop
@@ -167,7 +179,7 @@ class TitleState extends FlxState {
 	}
 
 	public function clickCredits() {
-		// openSubState(new CreditsSubState());
+		openSubState(new CreditsSubState());
 	}
 
 	#if desktop
@@ -201,5 +213,11 @@ Left/Right: A/Left, S/Right', textSize);
 			FlxG.height - 100, textWidth, Globals.TEXT_VERSION, textSize);
 		versionText.screenCenter(FlxAxes.X);
 		add(versionText);
+	}
+
+	function updateMouse() {
+		mouseCursor.scrollFactor.set(0, 0);
+		var mousePosition = FlxG.mouse.getPosition();
+		mouseCursor.setPosition(mousePosition.x, mousePosition.y);
 	}
 }

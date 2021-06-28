@@ -5,6 +5,7 @@ import game.ui.TextButton;
 class PauseSubState extends FlxSubState {
 	public var pauseText:FlxText;
 
+	var mouseCursor:FlxSprite;
 	private var pauseExitSound:FlxSound;
 	private var initialPosition:Float;
 	private var timeCount:Float;
@@ -36,7 +37,17 @@ class PauseSubState extends FlxSubState {
 		returnToTitleButton.clickColor = KColor.BURGUNDY;
 		add(resumeButton);
 		add(returnToTitleButton);
+		setupMouse();
 		super.create();
+	}
+
+	function setupMouse() {
+		mouseCursor = new FlxSprite(8, 8);
+		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 8, 8, true);
+		mouseCursor.animation.add('moving', [0], null, true);
+
+		FlxG.mouse.visible = false;
+		add(mouseCursor);
 	}
 
 	override public function update(elapsed:Float) {
@@ -67,5 +78,11 @@ class PauseSubState extends FlxSubState {
 
 			FlxG.switchState(new TitleState());
 		});
+	}
+
+	function updateMouse() {
+		mouseCursor.scrollFactor.set(0, 0);
+		var mousePosition = FlxG.mouse.getPosition();
+		mouseCursor.setPosition(mousePosition.x, mousePosition.y);
 	}
 }

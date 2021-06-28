@@ -18,11 +18,10 @@ class CreditsSubState extends FlxSubState {
 	}
 
 	function setupMouse() {
-		mouseCursor = new FlxSprite(12, 12);
-		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 12, 12,
-			true);
+		mouseCursor = new FlxSprite(8, 8);
+		mouseCursor.loadGraphic(AssetPaths.mouse_cursor__png, true, 8, 8, true);
 		mouseCursor.animation.add('moving', [0], null, true);
-		mouseCursor.animation.add('hold', [1], null, true);
+
 		FlxG.mouse.visible = false;
 		add(mouseCursor);
 	}
@@ -37,13 +36,13 @@ class CreditsSubState extends FlxSubState {
 		var kinoText = new FlxText(x, y, -1, 'Designer Kino Rose - @EISKino',
 			Globals.FONT_L);
 		y += 40;
-		var jdText = new FlxText(x, y, -1, 'Music by JDSherbert',
-			Globals.FONT_L);
+		// var jdText = new FlxText(x, y, -1, 'Music by JDSherbert',
+		// Globals.FONT_L);
 
 		kinoText.cameraCenterHorz();
-		jdText.screenCenterHorz();
+		// jdText.screenCenterHorz();
 		add(kinoText);
-		add(jdText);
+		// add(jdText);
 	}
 
 	override function update(elapsed:Float) {
