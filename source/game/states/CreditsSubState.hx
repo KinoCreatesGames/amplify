@@ -12,9 +12,9 @@ class CreditsSubState extends FlxSubState {
 		super.create();
 		var verticalPadding = 24;
 		var horizontalPadding = 24;
-		setupMouse();
 		createTitle(horizontalPadding, verticalPadding);
 		createCredits(horizontalPadding, verticalPadding * 3);
+		setupMouse();
 	}
 
 	function setupMouse() {
