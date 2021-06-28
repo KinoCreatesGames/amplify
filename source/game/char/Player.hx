@@ -1,8 +1,10 @@
 package game.char;
 
+import flixel.addons.display.FlxSliceSprite;
 import flixel.math.FlxRect;
-import game.objects.Laser;
+import game.objects.SliceLaser;
 import flixel.math.FlxVector;
+import openfl.Vector;
 
 class Player extends Actor {
 	public static inline var M_SPEED = 200;
@@ -11,7 +13,9 @@ class Player extends Actor {
 	var firePosition:FlxPoint;
 	var fireNormal:FlxVector;
 	var fireLine:FlxSprite;
-	var firingLaser:Laser;
+	var firingLaser:SliceLaser;
+	var actualLaser:FlxSprite;
+	var cachedVertices:Vector<Float>;
 
 	/**
 	 * 90 Degree angle offset to account for the ship direction in 
@@ -39,9 +43,16 @@ class Player extends Actor {
 	}
 
 	function createFireLaser() {
-		firingLaser = new Laser(new FlxRect(2, 1, 4, 6));
-		firingLaser.origin.set(0, 0);
+		firingLaser = new SliceLaser(new FlxRect(2, 2, 4, 4));
+		firingLaser.height = 100;
+
+		actualLaser = new FlxSprite(0, 0);
+		actualLaser.makeGraphic(8, 8, KColor.RED);
+		// firingLaser.stretchCenter = true;
+		// firingLaser.origin.set(0, 0);
 		FlxG.state.add(firingLaser);
+		FlxG.state.add(actualLaser);
+		cachedVertices = new Vector<Float>();
 	}
 
 	override public function assignStats() {
@@ -68,9 +79,28 @@ class Player extends Actor {
 		fireLine.angle = fireNormal.degrees;
 		fireLine.x = this.x + (this.width / 2);
 		fireLine.y = this.y + (this.height / 2);
-		firingLaser.x = this.x;
-		firingLaser.y = this.y;
-		firingLaser.angle = fireNormal.degrees;
+		firingLaser.x = this.x + (this.width / 2);
+		firingLaser.y = this.y + (this.height / 2);
+
+		if (cachedVertices.length == 0 && firingLaser.vertices != null
+			&& firingLaser.vertices.length > 0) {
+			cachedVertices = firingLaser.vertices.copy();
+		}
+		// Angle For the laser that the player will fire at the  enemies
+		var angle = (fireNormal.degrees.degToRad()
+			+ ANGLE_OFFSET.degToRad())
+			+ 180.degToRad();
+		for (index in 0...cachedVertices.length) {
+			if ((index + 1) % 2 == 0) {
+				firingLaser.vertices[index] = cachedVertices[index
+					- 1] * Math.sin(angle)
+					+ cachedVertices[index] * Math.cos(angle);
+			} else {
+				firingLaser.vertices[index] = cachedVertices[index] * Math.cos(angle)
+					- cachedVertices[index + 1] * Math.sin(angle);
+			}
+		}
+
 		this.angle = fireNormal.degrees + ANGLE_OFFSET;
 	}
 
